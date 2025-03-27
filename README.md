@@ -41,7 +41,7 @@ The ML-EPM provides the following outputs:
 
 ## Example Usage
 
-The model is designed to be run with a specific datetime. The provided code includes an example of how to generate predictions:
+The model is designed to be run with a specific datetime. The provided code includes an example of how to generate predictions. Note that the current model setting cannot provide the real-time predictions due to unavailability of Geomagnetic Indices in real-time.
 
 ```python
 from datetime import datetime
