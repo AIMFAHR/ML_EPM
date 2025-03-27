@@ -40,6 +40,7 @@ The model is designed to be run with a specific datetime. The provided code incl
 
 ```python
 from datetime import datetime
+import numpy as np
 from ml_epm import gen_spectrum_local , gen_global_data, plot_flux_map
 time1 = datetime(2014,2,27,18,0,0)
 # df, inputs, inputs_scaled, model = gen_spectrum_local(time1, 65, 0, m='ele') # Example for a specific location
