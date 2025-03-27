@@ -95,10 +95,10 @@ def sw_imf_global(time1, min_mlat = 40, max_mlat = 90):
     
     # Check if all values in 'df["PC"]' are NaN
     if df['PC'].isna().all():
-        new_df1 = pd.read_csv('Data/pcn20240510p.csv')
-        new_df2 = pd.read_csv('Data/pcn20240511p.csv')
-        new_df3 = pd.read_csv('Data/pcn20240512p.csv')
-        new_df4 = pd.read_csv('Data/pcn20240513p.csv')
+        new_df1 = pd.read_csv('data/pcn20240510p.csv')
+        new_df2 = pd.read_csv('data/pcn20240511p.csv')
+        new_df3 = pd.read_csv('data/pcn20240512p.csv')
+        new_df4 = pd.read_csv('data/pcn20240513p.csv')
         
         new_df = pd.concat([new_df1,new_df2,new_df3,new_df4])
         start_time = df['timestamps'].iloc[0]
@@ -208,10 +208,10 @@ def sw_imf_local(time1,mlat,mlt):
     
     # Check if all values in 'df["PC"]' are NaN
     if df['PC'].isna().all():
-        new_df1 = pd.read_csv('Data/pcn20240510p.csv')
-        new_df2 = pd.read_csv('Data/pcn20240511p.csv')
-        new_df3 = pd.read_csv('Data/pcn20240512p.csv')
-        new_df4 = pd.read_csv('Data/pcn20240513p.csv')
+        new_df1 = pd.read_csv('data/pcn20240510p.csv')
+        new_df2 = pd.read_csv('data/pcn20240511p.csv')
+        new_df3 = pd.read_csv('data/pcn20240512p.csv')
+        new_df4 = pd.read_csv('data/pcn20240513p.csv')
         
         new_df = pd.concat([new_df1,new_df2,new_df3,new_df4])
         start_time = df['timestamps'].iloc[0]
@@ -327,7 +327,7 @@ def ML_PPM(m):
         return total_loss
     if m == 'ele':
         # Load the scaler from the file
-        with open('input_scaler_sw_imf_ele.pkl', 'rb') as handle:
+        with open('data/input_scaler_sw_imf_ele.pkl', 'rb') as handle:
             scaler_X = pickle.load(handle)
         def build_resnet_model(input_shape):
             # Input layer
@@ -361,7 +361,7 @@ def ML_PPM(m):
         input_shape = (81,)
         model = build_resnet_model(input_shape)
         # Loading ML-PPM electron precipiation model
-        loaded_weights = np.load('Data/ele.npz')
+        loaded_weights = np.load('data/ele.npz')
         # Convert the weights back to a list
         wt_list = [loaded_weights[key] for key in sorted(loaded_weights.files, key=lambda x: int(x.split('_')[1]))]
         # Set the weights to the model
@@ -594,7 +594,7 @@ def plot_flux_map(predictions, timestamp, mlt_grid, mlat_grid):
     cbar.set_label(r'Electron Flux (mW/m$^2$)', fontsize=14, fontweight='bold')
     
     # **Auroral Boundary Detection**
-    threshold = 0.2  # Define threshold for auroral boundary
+    threshold = 0.2 
     eq_edges, pol_edges = [], []
 
     for i in range(mlt_grid.shape[1]):  # Loop over MLT
@@ -620,7 +620,6 @@ def plot_flux_map(predictions, timestamp, mlt_grid, mlat_grid):
         ax.scatter(eq_glon, eq_glat, color='red', s=10, transform=ccrs.PlateCarree(), label='Equatorward Edge')
         ax.scatter(pol_glon, pol_glat, color='green', s=10, transform=ccrs.PlateCarree(), label='Poleward Edge')
     
-    # Add title
     ax.set_title(f'ML-EPM: Electron Total Ener. Flux Predictions\n{timestamp.strftime("%Y-%m-%d %H:%M UT")}', fontsize=16, fontweight='bold', y=1.05)
     ax.add_feature(Nightshade(timestamp, alpha=0.3))
     plt.show()
