@@ -95,10 +95,10 @@ def sw_imf_global(time1, min_mlat = 40, max_mlat = 90):
     
     # Check if all values in 'df["PC"]' are NaN
     if df['PC'].isna().all():
-        new_df1 = pd.read_csv('C:/Users/svalluri/Downloads/pcn20240510p.csv')
-        new_df2 = pd.read_csv('C:/Users/svalluri/Downloads/pcn20240511p.csv')
-        new_df3 = pd.read_csv('C:/Users/svalluri/Downloads/pcn20240512p.csv')
-        new_df4 = pd.read_csv('C:/Users/svalluri/Downloads/pcn20240513p.csv')
+        new_df1 = pd.read_csv('Data/pcn20240510p.csv')
+        new_df2 = pd.read_csv('Data/pcn20240511p.csv')
+        new_df3 = pd.read_csv('Data/pcn20240512p.csv')
+        new_df4 = pd.read_csv('Data/pcn20240513p.csv')
         
         new_df = pd.concat([new_df1,new_df2,new_df3,new_df4])
         start_time = df['timestamps'].iloc[0]
@@ -208,10 +208,10 @@ def sw_imf_local(time1,mlat,mlt):
     
     # Check if all values in 'df["PC"]' are NaN
     if df['PC'].isna().all():
-        new_df1 = pd.read_csv('C:/Users/svalluri/Downloads/pcn20240510p.csv')
-        new_df2 = pd.read_csv('C:/Users/svalluri/Downloads/pcn20240511p.csv')
-        new_df3 = pd.read_csv('C:/Users/svalluri/Downloads/pcn20240512p.csv')
-        new_df4 = pd.read_csv('C:/Users/svalluri/Downloads/pcn20240513p.csv')
+        new_df1 = pd.read_csv('Data/pcn20240510p.csv')
+        new_df2 = pd.read_csv('Data/pcn20240511p.csv')
+        new_df3 = pd.read_csv('Data/pcn20240512p.csv')
+        new_df4 = pd.read_csv('Data/pcn20240513p.csv')
         
         new_df = pd.concat([new_df1,new_df2,new_df3,new_df4])
         start_time = df['timestamps'].iloc[0]
@@ -361,7 +361,7 @@ def ML_PPM(m):
         input_shape = (81,)
         model = build_resnet_model(input_shape)
         # Loading ML-PPM electron precipiation model
-        loaded_weights = np.load('ele.npz')
+        loaded_weights = np.load('Data/ele.npz')
         # Convert the weights back to a list
         wt_list = [loaded_weights[key] for key in sorted(loaded_weights.files, key=lambda x: int(x.split('_')[1]))]
         # Set the weights to the model
@@ -636,110 +636,3 @@ if __name__== "__main__":
     tef = predictions_ele['Total Energy Flux'].values
     tef = np.reshape(tef, [50, 50])
     fig = plot_flux_map(tef, time1, mlt, mlat)
-
-
-# import shap
-# import pandas as pd
-# import numpy as np
-# import pickle
-
-# time1 = datetime(2014,2,27,6,0,0)
-# df, inputs, inputs_scaled, model, mlt, mlat, predictions_ele = gen_global_data(time1, min_mlat = 40, max_mlat = 90, m='ele')
-
-# # Define input features and output channels (keep these as they are needed for naming plots)
-# input_SW_IMF = ['SC_AACGM_LAT', 'sin_ut', 'cos_ut', 'sin_doy', 'cos_doy', 'sin_SC_AACGM_LTIME', 'cos_SC_AACGM_LTIME', 'F107',
-#                 'Bz', 'By', 'Bx', 'vsw', 'psw', 'AU', 'AL', 'SymH', 'PC',
-#                 'Bz_6hr', 'By_6hr', 'Bx_6hr', 'vsw_6hr', 'psw_6hr', 'AU_6hr', 'AL_hr', 'SymH_6hr', 'PC_6hr',
-#                 'Bz_3hr', 'By_3hr', 'Bx_3hr', 'vsw_3hr', 'psw_3hr', 'AU_3hr', 'AL_3hr', 'SymH_3hr', 'PC_3hr',
-#                 'Bz_2hr', 'By_2hr', 'Bx_2hr', 'vsw_2hr', 'psw_2hr', 'AU_2hr', 'AL_2hr', 'SymH_2hr', 'PC_2hr',
-#                 'Bz_1hr', 'By_1hr', 'Bx_1hr', 'vsw_1hr', 'psw_1hr', 'AU_1hr', 'AL_1hr', 'SymH_1hr', 'PC_1hr',
-#                 'Bz_45min', 'By_45min', 'Bx_45min', 'vsw_45min', 'psw_45min', 'AU_45min', 'AL_45min', 'SymH_45min', 'PC_45min',
-#                 'Bz_30min', 'By_30min', 'Bx_30min', 'vsw_30min', 'psw_30min', 'AU_30min', 'AL_30min', 'SymH_30min', 'PC_30min',
-#                 'Bz_10min', 'By_10min', 'Bx_10min', 'vsw_10min', 'psw_10min', 'AU_10min', 'AL_10min', 'SymH_10min', 'PC_10min',
-#                 'StormTime']
-# chanelsE = ['Ech1', 'Ech2', 'Ech3', 'Ech4', 'Ech5',
-#             'Ech6', 'Ech7', 'Ech8', 'Ech9', 'Ech10',
-#             'Ech11', 'Ech12', 'Ech13', 'Ech14', 'Ech15',
-#             'Ech16', 'Ech17', 'Ech18', 'Ech19']
-# inputs_scaled = pd.DataFrame(inputs_scaled, columns = input_SW_IMF) # Assuming inputs_scaled DataFrame is still available
-# inputs_scaled_np = inputs_scaled.to_numpy() # Assuming inputs_scaled_np is still available and representative
-
-# feature_names = input_SW_IMF # Define feature names
-
-
-# # # --- Load pre-calculated SHAP values from .pkl file ---
-# pkl_file_path = 'shap_values_South_IMFBz.pkl'  # Path to your .pkl file
-# with open(pkl_file_path, 'rb') as f:
-#     shap_values = pickle.load(f)
-
-# data_to_explain = inputs_scaled_np # Or load data_to_explain from a file if you saved it
-
-
-# # --- Remove explainer and shap_values calculation ---
-# # explainer = shap.Explainer(model, inputs_scaled_np) # No need to create explainer
-# # shap_values = explainer.shap_values(data_to_explain) # SHAP values are loaded
-
-# # with open('shap_values_North_IMFBz.pkl', 'wb') as file:
-# #         pickle.dump(shap_values, file)
-
-
-# print("Type of shap_values:", type(shap_values))
-# if isinstance(shap_values, list):
-#     print("Shape of shap_values[0]:", shap_values[0].shape)
-# else:
-#     print("Shape of shap_values:", shap_values.shape)
-# print("Type of data_to_explain:", type(data_to_explain))
-# print("Shape of data_to_explain:", data_to_explain.shape)
-# print("Type of feature_names:", type(feature_names))
-# print("Length of feature_names:", len(feature_names))
-
-
-# # --- 3. Global Feature Importance ---
-# # 3.1. Mean Absolute SHAP Values
-# mean_abs_shap = np.abs(shap_values).mean(axis=0) # Mean over samples, output channels combined
-# if isinstance(shap_values, list): # Handle multi-output case explicitly if needed
-#     mean_abs_shap_per_output = [np.abs(sv).mean(axis=0) for sv in shap_values] # List of arrays, one per output
-
-# # 3.2. Bar Plot of Feature Importance (Combined outputs)
-# import matplotlib.pyplot as plt
-# feature_importance = pd.DataFrame(list(zip(feature_names, mean_abs_shap.mean(axis=0))), # Averaging over output channels for combined importance
-#                                   columns=['Feature', 'Mean_Abs_SHAP']) # If shap_values is list, adjust indexing
-# feature_importance = feature_importance.sort_values(by='Mean_Abs_SHAP', ascending=False)
-
-# plt.figure(figsize=(10, 6), dpi = 150)
-# plt.bar(feature_importance['Feature'], feature_importance['Mean_Abs_SHAP'])
-# plt.xticks(rotation=90)
-# plt.title('Global Feature Importance (Mean Absolute SHAP)')
-# plt.xlabel('Feature')
-# plt.ylabel('Mean Absolute SHAP Value')
-# plt.tight_layout()
-# plt.show()
-
-
-# # --- 4. SHAP Summary Plots ---
-# # 4.1. Summary Plot (Beeswarm - for the first output channel)
-# shap.summary_plot(shap_values[:, :, 10],  # SHAP values for ALL samples, ALL features, and FIRST output channel
-#                     features=data_to_explain,
-#                     feature_names=feature_names)
-
-# # 4.2. Summary Plot (Bar - for the first output channel)
-# shap.summary_plot(shap_values[:, :, 0],  # SHAP values for ALL samples, ALL features, and FIRST output channel
-#                     features=data_to_explain,
-#                     feature_names=feature_names,
-#                     plot_type='bar')
-
-
-# # --- 5. SHAP Dependence Plots ---
-# # 5.1. Dependence Plot for a top feature (e.g., the first one from feature_importance)
-# top_feature = feature_importance['Feature'].iloc[0] # Get most important feature name
-# shap.dependence_plot(top_feature,
-#                        shap_values[:, :, 5],  # SHAP values for ALL samples, ALL features, and FIRST output channel
-#                        features=data_to_explain,
-#                        feature_names=feature_names)
-
-# # --- 6. Individual Prediction Explanation (Example for the first data point) ---
-# # Force plot for the first data point (for the first output channel)
-# shap.force_plot(0, # Base value set to 0
-#                 shap_values[0, :, 5] if isinstance(shap_values, list) else shap_values[0, :, 5],  # SHAP values for first sample, ALL features, first output channel
-#                 features=data_to_explain[0],
-#                 feature_names=feature_names)
