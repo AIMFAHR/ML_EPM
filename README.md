@@ -51,7 +51,8 @@ from ml_epm import gen_spectrum_local , gen_global_data, plot_flux_map
 dt = datetime(2014,2,27,18,0,0)
 # df, inputs, inputs_scaled, model = gen_spectrum_local(dt, 65, 0, m='ele') # Example for a specific location
 # Produce dial plots of diff. energy flux of electrons in all 19 energy channels and the total energy flux
-df, inputs, inputs_scaled, model, mlt, mlat, predictions_ele = gen_global_data(dt, min_mlat = 40, max_mlat = 90, m='ele', plot='yes') # plot='no' for predictions only option.
+# plot='no' for predictions only option.
+df, inputs, inputs_scaled, model, mlt, mlat, predictions_ele = gen_global_data(dt, min_mlat = 40, max_mlat = 90, m='ele', plot='yes')
 tef = predictions_ele['Total Energy Flux'].values
 tef = np.reshape(tef, [50, 50])
 fig = plot_flux_map(tef, dt, mlt, mlat)
