@@ -47,9 +47,9 @@ The model is designed to be run with a specific datetime. The provided code incl
 from datetime import datetime
 import numpy as np
 from ml_epm import gen_spectrum_local , gen_global_data, plot_flux_map
-time1 = datetime(2014,2,27,18,0,0)
-# df, inputs, inputs_scaled, model = gen_spectrum_local(time1, 65, 0, m='ele') # Example for a specific location
-df, inputs, inputs_scaled, model, mlt, mlat, predictions_ele = gen_global_data(time1, min_mlat = 40, max_mlat = 90, m='ele')
+dt = datetime(2014,2,27,18,0,0)
+# df, inputs, inputs_scaled, model = gen_spectrum_local(dt, 65, 0, m='ele') # Example for a specific location
+df, inputs, inputs_scaled, model, mlt, mlat, predictions_ele = gen_global_data(dt, min_mlat = 40, max_mlat = 90, m='ele')
 tef = predictions_ele['Total Energy Flux'].values
 tef = np.reshape(tef, [50, 50])
-fig = plot_flux_map(tef, time1, mlt, mlat)
+fig = plot_flux_map(tef, dt, mlt, mlat)
