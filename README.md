@@ -2,6 +2,8 @@
 
 [![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+![Animation of ML-EPM Output](image/flux_animation_27feb2014.gif)
+
 This repository contains the Python code for the **Machine Learning-based Electron Precipitation Model (ML-EPM)**.
 
 ## Overview
