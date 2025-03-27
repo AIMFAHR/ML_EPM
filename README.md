@@ -34,6 +34,11 @@ The ML-EPM provides the following outputs:
 * **Total Energy Flux:** The integrated energy flux of precipitating electrons.
 * **Mean Energy:** The average energy of the precipitating electrons.
 
+## Installtion
+
+* 1. Install all required modules from requirements.txt
+* 2. Install NASA OMNI reader from here: https://github.com/lkilcommons/nasaomnireader
+
 ## Example Usage
 
 The model is designed to be run with a specific datetime. The provided code includes an example of how to generate predictions:
