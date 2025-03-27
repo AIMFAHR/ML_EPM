@@ -510,6 +510,31 @@ def gen_global_data(time1, min_mlat = 40, max_mlat = 90, m=None):
         plt.subplots_adjust(bottom=0.01, top=0.95, left=0.05, right=0.95, hspace=0.5)
         cbar = fig1.colorbar(qcs_list[0], ax=axes[:19], orientation='horizontal', pad=0.05, shrink=0.5)
         cbar.set_label(r'eV/cm$^2$.s')
+        plt.show()
+        
+        fig2, axes = plt.subplots(figsize=(10, 10), dpi=300, subplot_kw=dict(projection='polar'))
+        vmin = 0.0
+        vmax = 2.0
+        norm = colors.Normalize(vmin=vmin, vmax=vmax)
+        selected_channels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+        ch_data = np.array(predictions['Total Energy Flux'])
+        ch_data = np.reshape(ch_data, [100, 100])
+        ax = axes
+        qcs = ax.pcolormesh(mlong, 90 - mlat, ch_data, cmap='plasma', norm = norm)
+        ax.set_theta_zero_location("S")
+        ax.set_ylim(0, 40)
+        ax.xaxis.grid(linestyle='--', linewidth=0.8)
+        ax.yaxis.grid(linestyle='--', linewidth=0.8)
+        xtickpos = [0.0, 0.78539816, 1.57079633, 2.35619449, 3.14159265, 3.92699082, 4.71238898, 5.49778714]
+        xticks = ['00', '03', '06', '09', '12', '15', '18', '21']
+        ax.set_xticks(xtickpos, xticks, fontweight="bold",fontsize = 16)
+        ytickpos = [10.0, 20.0, 30.0, 40.0]
+        yticks = ['80$^\circ$', '70$^\circ$', '60$^\circ$', '50$^\circ$']
+        ax.set_yticks(ytickpos, yticks)
+        ax.set_title('Electron Total Energy Flux', y=1.1, fontweight="bold", fontsize=20)
+        cbar = fig2.colorbar(qcs, ax=ax, orientation='horizontal', pad=0.05, shrink=0.5)
+        cbar.set_label(r'mW/m$^2$')
+        plt.show()
         
         return df, inputs, inputs_scaled, model, mlt, mlat, predictions
 
