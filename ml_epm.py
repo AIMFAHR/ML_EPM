@@ -477,6 +477,40 @@ def gen_global_data(time1, min_mlat = 40, max_mlat = 90, m=None):
         tmp = process_energy_flux(predictions)
         tmp['Total Energy Flux'] = tmp['Total Energy Flux'] * 1.602 * 10**-12 
         predictions = pd.concat([predictions, tmp], axis=1)
+        fig1, axes = plt.subplots(4, 5, figsize=(20, 20), dpi=300, subplot_kw=dict(projection='polar'))
+
+        axes = axes.flatten()
+        vmin = 0.0
+        vmax = 7e7
+        norm = colors.Normalize(vmin=vmin, vmax=vmax)
+        # axes = np.delete(axes, -1)
+        selected_channels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+
+        qcs_list = []
+
+        for i, ch in enumerate(selected_channels):
+            ch_data = np.array(predictions[f'Ech{ch}'])
+            ch_data = np.reshape(ch_data, [100, 100])
+            ax = axes[i]
+            qcs = ax.pcolormesh(mlong, 90 - mlat, ch_data, cmap='plasma', norm=norm)
+            ax.set_theta_zero_location("S")
+            ax.set_ylim(0, 50)
+            ax.xaxis.grid(linestyle='--', linewidth=0.8)
+            ax.yaxis.grid(linestyle='--', linewidth=0.8)
+            xtickpos = [0.0, 0.78539816, 1.57079633, 2.35619449, 3.14159265, 3.92699082, 4.71238898, 5.49778714]
+            xticks = ['00', '03', '06', '09', '12', '15', '18', '21']
+            ax.set_xticks(xtickpos, xticks, fontweight="bold",fontsize = 16)
+            ytickpos = [10.0, 20.0, 30.0, 40.0, 50.0]
+            yticks = ['80$^\circ$', '70$^\circ$', '60$^\circ$', '50$^\circ$', '40$^\circ$']
+            ax.set_yticks(ytickpos, yticks)
+            ax.set_title(f'Ch{ch}: {Energy[ch - 1]}(eV)', y=1.1, fontweight="bold", fontsize=20)
+            qcs_list.append(qcs)
+
+        axes[19].axis('off')
+        plt.subplots_adjust(bottom=0.01, top=0.95, left=0.05, right=0.95, hspace=0.5)
+        cbar = fig1.colorbar(qcs_list[0], ax=axes[:19], orientation='horizontal', pad=0.05, shrink=0.5)
+        cbar.set_label(r'eV/cm$^2$.s')
+        
         return df, inputs, inputs_scaled, model, mlt, mlat, predictions
 
 def gen_spectrum_local(time1, mlat, mlt, m=None):
