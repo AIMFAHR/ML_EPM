@@ -1,4 +1,4 @@
-******* Machine Learning-based Electron Precipitation Model (ML-PPM) ********
+Machine Learning-based Electron Precipitation Model (ML-EPM)
 
 This Python code contains the Machine Learning-based Electron Precipitation Model (ML-EPM).
 ML-EPM is trained using the DMSP SSJ data from (1987-1988, 2000-2012). The model can predict the 
