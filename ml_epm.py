@@ -491,7 +491,7 @@ def gen_global_data(time1, min_mlat = 40, max_mlat = 90, m=None, plot='no'):
     
             for i, ch in enumerate(selected_channels):
                 ch_data = np.array(predictions[f'Ech{ch}'])
-                ch_data = np.reshape(ch_data, [100, 100])
+                ch_data = np.reshape(ch_data, [50, 50])
                 ax = axes[i]
                 qcs = ax.pcolormesh(mlong, 90 - mlat, ch_data, cmap='plasma', norm=norm)
                 ax.set_theta_zero_location("S")
