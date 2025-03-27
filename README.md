@@ -28,7 +28,7 @@ The ML-EPM utilizes a comprehensive set of input features derived from solar win
 
 The ML-EPM provides the following outputs:
 
-* **Differential Energy Spectra of Electrons:** Predictions across multiple energy channels (see the code for specific energy levels).
+* **Differential Energy Spectra of Electrons:** Predictions across multiple energy channels (30eV to 30keV).
 * **Total Energy Flux:** The integrated energy flux of precipitating electrons.
 * **Mean Energy:** The average energy of the precipitating electrons.
 
