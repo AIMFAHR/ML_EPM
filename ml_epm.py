@@ -512,7 +512,6 @@ def plot_flux_map(predictions, timestamp, mlt_grid, mlat_grid):
         timestamp: datetime object for AACGMv2 transformations.
         mlt_grid: 2D numpy array representing Magnetic Local Time grid.
         mlat_grid: 2D numpy array representing Magnetic Latitude grid.
-        region: Region to focus on ('global', 'canada', 'europe').
     """
     
     
@@ -560,17 +559,17 @@ def plot_flux_map(predictions, timestamp, mlt_grid, mlat_grid):
     ax.add_feature(borders, edgecolor=bordercolor, alpha=borderalpha)
     
     gl = ax.gridlines(draw_labels=True, color='gray', alpha=0.75, linestyle='--')
-    gl.xlocator = plt.FixedLocator(np.arange(-180, 181, 30))  # Longitudes every 30 degrees
-    gl.ylocator = plt.FixedLocator(np.arange(-90, 91, 10))    # Latitudes every 10 degrees
-    gl.top_labels = False  # Disable labels on the top
-    gl.right_labels = False  # Disable labels on the right
-    gl.bottom_labels = False  # Disable labels on the bottom
-    gl.left_labels = False  # Disable labels on the left
+    gl.xlocator = plt.FixedLocator(np.arange(-180, 181, 30)) 
+    gl.ylocator = plt.FixedLocator(np.arange(-90, 91, 10))   
+    gl.top_labels = False 
+    gl.right_labels = False 
+    gl.bottom_labels = False
+    gl.left_labels = False 
     
     latitudes = np.arange(-90, 91, 20)
     for lat in latitudes:
         ax.text(
-            -179, lat, f"{lat}°",  # Adjust -179 to the left-most longitude
+            -179, lat, f"{lat}°",  
             transform=ccrs.PlateCarree(),
             ha='left', va='center',
             fontsize=11, color='gray', alpha=0.7
