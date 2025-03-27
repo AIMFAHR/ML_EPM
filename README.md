@@ -22,14 +22,7 @@ The ML-EPM utilizes a comprehensive set of input features derived from solar win
 * **Interplanetary Magnetic Field (IMF):** `Bz`, `By`, `Bx` (GSM components)
 * **Solar Wind Parameters:** `vsw` (Solar wind speed), `psw` (Solar wind dynamic pressure)
 * **Geomagnetic Indices:** `AU`, `AL`, `SymH`, `PC` (Polar Cap index)
-* **Time History Features:** These include the IMF, solar wind, and geomagnetic indices listed above, but also their values averaged over previous time intervals:
-    * 6-hour history (`_6hr` suffix)
-    * 3-hour history (`_3hr` suffix)
-    * 2-hour history (`_2hr` suffix)
-    * 1-hour history (`_1hr` suffix)
-    * 45-minute history (`_45min` suffix)
-    * 30-minute history (`_30min` suffix)
-    * 10-minute history (`_10min` suffix)
+* **Time History Features:** These include 6-hour time-histories of IMF, solar wind, and geomagnetic indices listed above.
 
 ## Model Outputs
 
