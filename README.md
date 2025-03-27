@@ -1,32 +1,54 @@
-Machine Learning-based Electron Precipitation Model (ML-EPM)
+# Machine Learning-based Electron Precipitation Model (ML-EPM)
 
-This Python code contains the Machine Learning-based Electron Precipitation Model (ML-EPM).
-ML-EPM is trained using the DMSP SSJ data from (1987-1988, 2000-2012). The model can predict the 
-differential energy flux of electrons, total energy flux and mean energy of electrons.
+[![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-ML-EPM inputs:
+This repository contains the Python code for the **Machine Learning-based Electron Precipitation Model (ML-EPM)**.
 
-['SC_AACGM_LAT', 'sin_ut', 'cos_ut', 'sin_doy', 'cos_doy', 'sin_SC_AACGM_LTIME', 'cos_SC_AACGM_LTIME', 'F107',
-'Bz', 'By', 'Bx', 'vsw', 'psw', 'AU', 'AL', 'SymH', 'PC',
-'Bz_6hr', 'By_6hr', 'Bx_6hr', 'vsw_6hr', 'psw_6hr', 'AU_6hr', 'AL_6hr', 'SymH_6hr', 'PC_6hr',
-'Bz_3hr', 'By_3hr', 'Bx_3hr', 'vsw_3hr', 'psw_3hr', 'AU_3hr', 'AL_3hr', 'SymH_3hr', 'PC_3hr',
-'Bz_2hr', 'By_2hr', 'Bx_2hr', 'vsw_2hr', 'psw_2hr', 'AU_2hr', 'AL_2hr', 'SymH_2hr', 'PC_2hr',
-'Bz_1hr', 'By_1hr', 'Bx_1hr', 'vsw_1hr', 'psw_1hr', 'AU_1hr', 'AL_1hr', 'SymH_1hr', 'PC_1hr',
-'Bz_45min', 'By_45min', 'Bx_45min', 'vsw_45min', 'psw_45min', 'AU_45min', 'AL_45min', 'SymH_45min', 'PC_45min',
-'Bz_30min', 'By_30min', 'Bx_30min', 'vsw_30min', 'psw_30min', 'AU_30min', 'AL_30min', 'SymH_30min', 'PC_30min',
-'Bz_10min', 'By_10min', 'Bx_10min', 'vsw_10min', 'psw_10min', 'AU_10min', 'AL_10min', 'SymH_10min', 'PC_10min',
-'StormTime']
+## Overview
 
-ML-EPM outputs:
-    Differential Energy Spectra of electrons, total energy flux, mean energy 
-    (see examples in main part of the code)
-    
-Example usage of the current model: 
-    ML-EPM runs with Datetime string. This function will automatically
-    generates the required inputs from high-resolution NASA-OMNI and creates
-    the predictions.
-Note that some indices are not available in real-time, so the real-time predictions are not possible right now.
-    we are working on the real time operational model, stay tuned.
-    
+The ML-EPM is a machine learning model trained on DMSP SSJ data from 1987-1988 and 2000-2012. It is designed to predict key characteristics of electron precipitation in the Earth's upper atmosphere, including:
 
-"""
+* **Differential Energy Flux of Electrons**
+* **Total Energy Flux**
+* **Mean Energy of Electrons**
+
+## Model Inputs
+
+The ML-EPM utilizes a comprehensive set of input features derived from solar wind conditions, geomagnetic indices, and temporal and spatial information. These inputs include:
+
+* **Spatial Information:** `SC_AACGM_LAT` (Spacecraft Altitude Adjusted Corrected Geomagnetic Latitude), `sin_SC_AACGM_LTIME`, `cos_SC_AACGM_LTIME` (Sine and Cosine of Spacecraft AACGM Local Time)
+* **Temporal Information:** `sin_ut`, `cos_ut` (Sine and Cosine of Universal Time), `sin_doy`, `cos_doy` (Sine and Cosine of Day of Year), `StormTime`
+* **Solar Indices:** `F107` (F10.7 solar radio flux)
+* **Interplanetary Magnetic Field (IMF):** `Bz`, `By`, `Bx` (GSM components)
+* **Solar Wind Parameters:** `vsw` (Solar wind speed), `psw` (Solar wind dynamic pressure)
+* **Geomagnetic Indices:** `AU`, `AL`, `SymH`, `PC` (Polar Cap index)
+* **Time History Features:** These include the IMF, solar wind, and geomagnetic indices listed above, but also their values averaged over previous time intervals:
+    * 6-hour history (`_6hr` suffix)
+    * 3-hour history (`_3hr` suffix)
+    * 2-hour history (`_2hr` suffix)
+    * 1-hour history (`_1hr` suffix)
+    * 45-minute history (`_45min` suffix)
+    * 30-minute history (`_30min` suffix)
+    * 10-minute history (`_10min` suffix)
+
+## Model Outputs
+
+The ML-EPM provides the following outputs:
+
+* **Differential Energy Spectra of Electrons:** Predictions across multiple energy channels (see the code for specific energy levels).
+* **Total Energy Flux:** The integrated energy flux of precipitating electrons.
+* **Mean Energy:** The average energy of the precipitating electrons.
+
+## Example Usage
+
+The model is designed to be run with a specific datetime. The provided code includes an example of how to generate predictions:
+
+```python
+if __name__== "__main__":
+    time1 = datetime(2014,2,27,18,0,0)
+    # df, inputs, inputs_scaled, model = gen_spectrum_local(time1, 65, 0, m='ele') # Example for a specific location
+
+    df, inputs, inputs_scaled, model, mlt, mlat, predictions_ele = gen_global_data(time1, min_mlat = 40, max_mlat = 90, m='ele')
+    tef = predictions_ele['Total Energy Flux'].values
+    tef = np.reshape(tef, [50, 50])
+    fig = plot_flux_map(tef, time1, mlt, mlat)
