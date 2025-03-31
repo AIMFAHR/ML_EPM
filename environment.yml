@@ -3,7 +3,7 @@ channels:
   - defaults
   - conda-forge
 dependencies:
-  - python=3.10  # Adjust this version if needed
+  - python=3.10
   - pip
   - pip:
     - aacgmv2==2.6.3
