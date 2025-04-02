@@ -56,6 +56,7 @@ df, inputs, inputs_scaled, model, mlt, mlat, predictions_ele = gen_global_data(d
 tef = predictions_ele['Total Energy Flux'].values
 tef = np.reshape(tef, [50, 50])
 fig = plot_flux_map(tef, dt, mlt, mlat)
+'''
 
 ## Example Figures
 
