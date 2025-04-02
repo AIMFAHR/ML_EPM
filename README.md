@@ -53,6 +53,8 @@ dt = datetime(2014,2,27,18,0,0)
 # Produce dial plots of diff. energy flux of electrons in all 19 energy channels and the total energy flux
 # plot='no' for predictions only option.
 df, inputs, inputs_scaled, model, mlt, mlat, predictions_ele = gen_global_data(dt, min_mlat = 40, max_mlat = 90, m='ele', plot='yes')
+![Diff. Energy Flux Spectra of electrons](image/Complete_sepctra_example.png)
+![Total Energy Flux of electrons](image/TEF.png)
 tef = predictions_ele['Total Energy Flux'].values
 tef = np.reshape(tef, [50, 50])
 fig = plot_flux_map(tef, dt, mlt, mlat)
