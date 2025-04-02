@@ -60,5 +60,5 @@ fig = plot_flux_map(tef, dt, mlt, mlat)
 
 ## Example Figures
 
-[![Diff. Energy Flux Spectra of electrons](image/Complete_sepctra_example.png)
-![Total Energy Flux of electrons](image/TEF.png)]
+![Diff. Energy Flux Spectra of electrons](image/Complete_sepctra_example.png)
+![Total Energy Flux of electrons](image/TEF.png)
