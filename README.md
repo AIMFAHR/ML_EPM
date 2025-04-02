@@ -33,7 +33,9 @@ The ML-EPM provides the following outputs:
 * **Differential Energy Spectra of Electrons:** Predictions across multiple energy channels (30eV to 30keV).
 * **Total Energy Flux:** The integrated energy flux of precipitating electrons.
 * **Mean Energy:** The average energy of the precipitating electrons.
-![Global Map of Precipitation](image/TEF_globe.gif)
+
+![Global Map of Precipitation](image/TEF_globe.png)
+
 ## Installtion
 
 1. Create a virtual environment.
