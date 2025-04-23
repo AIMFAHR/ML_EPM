@@ -42,12 +42,13 @@ The present code is tested on Linux and Windows (on Windows Subsystems for Linux
 
 1. Download or clone the repository.
    ```bash
-   git clone
+   git clone https://github.com/AIMFAHR/ML_EPM.git
 2. Navigate to ML_EPM
+   ```bash
    cd ML-EPM
 4. Open Anaconda terminal
    ```bash
-   conda env create -f environment_cuda.yml
+   conda env create -f environment.yml
 7. Install NASA OMNI reader from here: https://github.com/lkilcommons/nasaomnireader
 8. Install spacepy and geospcepy using pip
    ```bash
