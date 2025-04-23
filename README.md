@@ -39,7 +39,7 @@ The ML-EPM provides the following outputs:
 ## Installtion
 
 1. Download or clone the repository:
-   '''bash
+   ```bash
    git clone 
 3. Install all required modules from requirements.txt
 4. Install NASA OMNI reader from here: https://github.com/lkilcommons/nasaomnireader
