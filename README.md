@@ -38,11 +38,20 @@ The ML-EPM provides the following outputs:
 
 ## Installtion
 
-1. Download or clone the repository:
+The present code is tested on Linux and Windows (on Windows Subsystems for Linux).  
+
+1. Download or clone the repository.
    ```bash
-   git clone 
-3. Install all required modules from requirements.txt
-4. Install NASA OMNI reader from here: https://github.com/lkilcommons/nasaomnireader
+   git clone
+2. Navigate to ML_EPM
+   cd ML-EPM
+4. Open Anaconda terminal
+   ```bash
+   conda env create -f environment_cuda.yml
+7. Install NASA OMNI reader from here: https://github.com/lkilcommons/nasaomnireader
+8. Install spacepy and geospcepy using pip
+   ```bash
+   pip install spacepy geospacepy
 
 ## Example Usage
 
