@@ -1,6 +1,7 @@
 aacgmv2==2.6.3
 cartopy==0.24.1
 apexpy==2.0.2
+geospacepy
 h5py==3.12.1
 keras==3.6.0
 matplotlib==3.9.2
