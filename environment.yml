@@ -5,23 +5,20 @@ channels:
 dependencies:
   - python=3.10
   - pip
+  - jupyterlab
+  - ipykernel
   - pip:
     - aacgmv2==2.6.3
     - cartopy==0.24.1
     - apexpy==2.0.2
     - geospacepy
-    - h5py==3.12.1
-    - keras==3.6.0
+    - keras==2.14.0
     - matplotlib==3.9.2
     - matplotlib-inline==0.1.7
     - numpy==1.26.4
-    - numpydoc==1.8.0
     - pandas==2.2.3
     - scikit-learn==1.5.2
     - scipy==1.14.1
     - setuptools==59.6.0
     - spacepy==0.6.0
-    - tensorboard==2.17.1
-    - tensorboard-data-server==0.7.2
-    - tensorflow==2.17.0
-    - tensorflow-io-gcs-filesystem==0.37.1
+    - tensorflow==2.14.0
