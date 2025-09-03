@@ -56,7 +56,7 @@ The present code is tested on Linux and Windows (on Windows Subsystems for Linux
 
 ## Example Usage
 
-The model is designed to be run with a specific datetime. The provided code includes an example of how to generate predictions. Note that the current model setting cannot provide the real-time predictions due to unavailability of Geomagnetic Indices in real-time.
+The model is designed to be run with a given datetime. The provided code includes an example of how to generate predictions. Please note that the current model setting cannot provide the real-time predictions due to unavailability of Geomagnetic Indices in real-time. **An operational friendly version is coming soon.**
 
 ```python
 from datetime import datetime
