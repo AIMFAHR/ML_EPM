@@ -23,7 +23,7 @@ The ML-EPM utilizes a comprehensive set of input features derived from solar win
 * **Solar Indices:** `F107` (F10.7 solar radio flux)
 * **Interplanetary Magnetic Field (IMF):** `Bz`, `By`, `Bx` (GSM components)
 * **Solar Wind Parameters:** `vsw` (Solar wind speed), `psw` (Solar wind dynamic pressure)
-* **Geomagnetic Indices:** `AU`, `AL`, `SymH`, `PC` (Polar Cap index)
+* **Geomagnetic Indices:** `AU`, `AL`, `SymH`, `A-SymH`, `PC` (Polar Cap index)
 * **Time History Features:** These include 6-hour time-histories of IMF, solar wind, and geomagnetic indices listed above.
 
 ## Model Outputs
