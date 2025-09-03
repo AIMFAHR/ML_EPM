@@ -1,0 +1,37 @@
+Machine Learning-based Electron Precipitation Model (ML-EPM)
+This repository contains the Python code for the Machine Learning-based Auroral Electron Precipitation Model (ML-EPM).
+
+Overview
+The ML-EPM is a machine learning model trained on DMSP SSJ data from 1987-1988 and 2000-2012. It is designed to predict key characteristics of electron precipitation in the Earth's upper atmosphere, including:
+
+Differential Energy Flux of Electrons
+Total Energy Flux
+Mean Energy of Electrons
+Model Inputs
+The ML-EPM utilizes a comprehensive set of input features derived from solar wind conditions, geomagnetic indices, and temporal and spatial information. These inputs include:
+
+Spatial Information: SC_AACGM_LAT (Spacecraft Altitude Adjusted Corrected Geomagnetic Latitude), sin_SC_AACGM_LTIME, cos_SC_AACGM_LTIME (Sine and Cosine of Spacecraft AACGM Local Time)
+Temporal Information: sin_ut, cos_ut (Sine and Cosine of Universal Time), sin_doy, cos_doy (Sine and Cosine of Day of Year), StormTime (binary: 1 for active geomagnetic conditions)
+Solar Indices: F107 (F10.7 solar radio flux)
+Interplanetary Magnetic Field (IMF): Bz, By, Bx (GSM components)
+Solar Wind Parameters: vsw (Solar wind speed), psw (Solar wind dynamic pressure)
+Geomagnetic Indices: AU, AL, SymH, A-SymH, PC (Polar Cap index)
+Time History Features: These include 6-hour time-histories of IMF, solar wind, and geomagnetic indices listed above.
+Model Outputs
+The ML-EPM provides the following outputs:
+
+Differential Energy Spectra of Electrons: Predictions across multiple energy channels (30eV to 30keV).
+Total Energy Flux: The integrated energy flux of precipitating electrons.
+Mean Energy: The average energy of the precipitating electrons.
+Installation
+The present code is tested on Linux and Windows (on Windows Subsystems for Linux).
+
+Download or clone the repository. 
+git clone https://github.com/AIMFAHR/ML_EPM.git
+Navigate to ML_EPM 
+cd ML-EPM
+Open Anaconda terminal 
+conda env create -f environment.yml
+Install NASA OMNI reader from here: https://github.com/lkilcommons/nasaomnireader
+Install spacepy and geospcepy using pip 
+pip install spacepy geospacepy
