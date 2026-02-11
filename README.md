@@ -45,7 +45,7 @@ The present code is tested on Linux and Windows (on Windows Subsystems for Linux
    git clone https://github.com/AIMFAHR/ML_EPM.git
 2. Navigate to ML_EPM
    ```bash
-   cd ML-EPM
+   cd ML_EPM
 4. Open Anaconda terminal
    ```bash
    conda env create -f environment.yml
