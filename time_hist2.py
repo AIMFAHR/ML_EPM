@@ -1,5 +1,8 @@
 
 # coding: utf-8
+'''
+time_hist2.py is adopted from this code: https://github.com/rmcgranaghan/precipNet/blob/master/time_hist2.py
+'''
 
 # In[1]:
 
