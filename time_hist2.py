@@ -2,6 +2,7 @@
 # coding: utf-8
 '''
 time_hist2.py is adopted from this code: https://github.com/rmcgranaghan/precipNet/blob/master/time_hist2.py
+Please cite the original code base if you find this useful: https://doi.org/10.1029/2020SW002684; https://github.com/rmcgranaghan/precipNet
 '''
 
 # In[1]:
