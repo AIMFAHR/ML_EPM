@@ -4,7 +4,7 @@ Created on Wed Nov 27 10:51:03 2024
 
 @author: SAI GOWTAM VALLURI
 
-******* Machine Learning-based Electron Precipitation Model (ML-PPM) ********
+******* Machine Learning-based Electron Precipitation Model (ML-EPM) ********
 
 This Python code contains the Machine Learning-based Electron Precipitation Model (ML-EPM).
 ML-EPM is trained using the DMSP SSJ data from (1987-1988, 2000-2012). The model can predict the 
@@ -58,7 +58,7 @@ plt.rcParams.update({'font.weight': 'bold'})
 import warnings
 warnings.filterwarnings("ignore")
 
-### Create the solar wind data for whole year ####
+### Create the solar wind data ####
 def sw_imf_global(time1, min_mlat = 40, max_mlat = 90):
     '''
     Input time->starting time
@@ -95,10 +95,10 @@ def sw_imf_global(time1, min_mlat = 40, max_mlat = 90):
     
     # Check if all values in 'df["PC"]' are NaN
     if df['PC'].isna().all():
-        new_df1 = pd.read_csv('data/pcn20240510p.csv')
-        new_df2 = pd.read_csv('data/pcn20240511p.csv')
-        new_df3 = pd.read_csv('data/pcn20240512p.csv')
-        new_df4 = pd.read_csv('data/pcn20240513p.csv')
+        new_df1 = pd.read_csv('pcn20240510p.csv')
+        new_df2 = pd.read_csv('pcn20240511p.csv')
+        new_df3 = pd.read_csv('pcn20240512p.csv')
+        new_df4 = pd.read_csv('pcn20240513p.csv')
         
         new_df = pd.concat([new_df1,new_df2,new_df3,new_df4])
         start_time = df['timestamps'].iloc[0]
@@ -153,11 +153,11 @@ def sw_imf_global(time1, min_mlat = 40, max_mlat = 90):
     df = df.set_index('timestamps')
     df = df.iloc[[-1]]
     
-    Nl = 50
-    Nmlt = 51
+    Nl = 100
+    Nmlt = 101
     mlat = np.linspace(min_mlat,max_mlat,Nl)
     mlt = np.linspace(0,2*np.pi,Nmlt)
-    mlt = mlt[0:50]
+    mlt = mlt[0:100]
     mlt,mlat = np.meshgrid(mlt,mlat)
     mlt = np.rad2deg(mlt)/15
     SC_AACGM_LTIME = mlt.flatten()
@@ -166,7 +166,7 @@ def sw_imf_global(time1, min_mlat = 40, max_mlat = 90):
     sin_SC_AACGM_LTIME = np.sin((2*np.pi*SC_AACGM_LTIME)/24)
     cos_SC_AACGM_LTIME = np.cos((2*np.pi*SC_AACGM_LTIME)/24)
 
-    df = pd.DataFrame(np.repeat(df.values, 2500, axis=0),columns=df.columns)
+    df = pd.DataFrame(np.repeat(df.values, 10000, axis=0),columns=df.columns)
     df['SC_AACGM_LAT'] = SC_AACGM_LAT
     df['sin_SC_AACGM_LTIME'] = sin_SC_AACGM_LTIME
     df['cos_SC_AACGM_LTIME'] = cos_SC_AACGM_LTIME
@@ -208,10 +208,10 @@ def sw_imf_local(time1,mlat,mlt):
     
     # Check if all values in 'df["PC"]' are NaN
     if df['PC'].isna().all():
-        new_df1 = pd.read_csv('data/pcn20240510p.csv')
-        new_df2 = pd.read_csv('data/pcn20240511p.csv')
-        new_df3 = pd.read_csv('data/pcn20240512p.csv')
-        new_df4 = pd.read_csv('data/pcn20240513p.csv')
+        new_df1 = pd.read_csv('pcn20240510p.csv')
+        new_df2 = pd.read_csv('pcn20240511p.csv')
+        new_df3 = pd.read_csv('pcn20240512p.csv')
+        new_df4 = pd.read_csv('pcn20240513p.csv')
         
         new_df = pd.concat([new_df1,new_df2,new_df3,new_df4])
         start_time = df['timestamps'].iloc[0]
@@ -297,11 +297,6 @@ def ML_PPM(m):
                 'Ech11', 'Ech12', 'Ech13', 'Ech14', 'Ech15',
                 'Ech16', 'Ech17', 'Ech18', 'Ech19']
     
-    chanelsI = ['Ich1', 'Ich2', 'Ich3', 'Ich4', 'Ich5',
-                'Ich6', 'Ich7', 'Ich8', 'Ich9', 'Ich10',
-                'Ich11', 'Ich12', 'Ich13', 'Ich14', 'Ich15',
-                'Ich16', 'Ich17', 'Ich18', 'Ich19']
-    
     keras.saving.get_custom_objects().clear()
     # custom activation and custom_loss
     @keras.saving.register_keras_serializable(package="my_pakage", name="custom_activation")
@@ -327,7 +322,7 @@ def ML_PPM(m):
         return total_loss
     if m == 'ele':
         # Load the scaler from the file
-        with open('data/input_scaler_sw_imf_ele.pkl', 'rb') as handle:
+        with open('input_scaler_sw_imf_ele.pkl', 'rb') as handle:
             scaler_X = pickle.load(handle)
         def build_resnet_model(input_shape):
             # Input layer
@@ -361,7 +356,7 @@ def ML_PPM(m):
         input_shape = (81,)
         model = build_resnet_model(input_shape)
         # Loading ML-PPM electron precipiation model
-        loaded_weights = np.load('data/ele.npz')
+        loaded_weights = np.load('ele.npz')
         # Convert the weights back to a list
         wt_list = [loaded_weights[key] for key in sorted(loaded_weights.files, key=lambda x: int(x.split('_')[1]))]
         # Set the weights to the model
@@ -446,15 +441,11 @@ def gen_global_data(time1, min_mlat = 40, max_mlat = 90, m=None, plot='no'):
                 'Ech11', 'Ech12', 'Ech13', 'Ech14', 'Ech15',
                 'Ech16', 'Ech17', 'Ech18', 'Ech19']
     
-    chanelsI = ['Ich1', 'Ich2', 'Ich3', 'Ich4', 'Ich5',
-                'Ich6', 'Ich7', 'Ich8', 'Ich9', 'Ich10',
-                'Ich11', 'Ich12', 'Ich13', 'Ich14', 'Ich15',
-                'Ich16', 'Ich17', 'Ich18', 'Ich19']
-    Nl = 50
-    Nmlt = 51
+    Nl = 100
+    Nmlt = 101
     mlat = np.linspace(min_mlat, max_mlat, Nl)
     mlt = np.linspace(0, 2*np.pi, Nmlt)
-    mlt = mlt[0:50]
+    mlt = mlt[0:100]
     mlt, mlat = np.meshgrid(mlt, mlat)
     mlt = np.rad2deg(mlt) / 15
     mlong = mlt * 15
@@ -491,7 +482,7 @@ def gen_global_data(time1, min_mlat = 40, max_mlat = 90, m=None, plot='no'):
     
             for i, ch in enumerate(selected_channels):
                 ch_data = np.array(predictions[f'Ech{ch}'])
-                ch_data = np.reshape(ch_data, [50, 50])
+                ch_data = np.reshape(ch_data, [100, 100])
                 ax = axes[i]
                 qcs = ax.pcolormesh(mlong, 90 - mlat, ch_data, cmap='plasma', norm=norm)
                 ax.set_theta_zero_location("S")
@@ -519,7 +510,7 @@ def gen_global_data(time1, min_mlat = 40, max_mlat = 90, m=None, plot='no'):
             norm = colors.Normalize(vmin=vmin, vmax=vmax)
             selected_channels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
             ch_data = np.array(predictions['Total Energy Flux'])
-            ch_data = np.reshape(ch_data, [50, 50])
+            ch_data = np.reshape(ch_data, [100, 100])
             ax = axes
             qcs = ax.pcolormesh(mlong, 90 - mlat, ch_data, cmap='plasma', norm = norm)
             ax.set_theta_zero_location("S")
@@ -606,7 +597,7 @@ def plot_flux_map(predictions, timestamp, mlt_grid, mlat_grid):
     fig, ax = plt.subplots(
         figsize=(10, 10),
         subplot_kw={"projection": ccrs.Orthographic(-110, 70)},
-        dpi=300,
+        dpi=600,
     )
     ax.set_global()
 
@@ -618,7 +609,7 @@ def plot_flux_map(predictions, timestamp, mlt_grid, mlat_grid):
     )
     ax.add_feature(borders, edgecolor=bordercolor, alpha=borderalpha)
     
-    gl = ax.gridlines(draw_labels=True, color='gray', alpha=0.75, linestyle='--')
+    gl = ax.gridlines(draw_labels=False, color='gray', alpha=0.75, linestyle='--')
     gl.xlocator = plt.FixedLocator(np.arange(-180, 181, 30)) 
     gl.ylocator = plt.FixedLocator(np.arange(-90, 91, 10))   
     gl.top_labels = False 
@@ -684,13 +675,164 @@ def plot_flux_map(predictions, timestamp, mlt_grid, mlat_grid):
     plt.show()
     return fig
 
+def plot_flux_map_dual(predictions, timestamp, mlt_grid, mlat_grid):
+    """
+    Plot electron flux predictions using pcolormesh on dual hemisphere maps.
+    
+    Args:
+        predictions: 2D numpy array of flux values (MLAT x MLT grid).
+        timestamp: datetime object for AACGMv2 transformations.
+        mlt_grid: 2D numpy array representing Magnetic Local Time grid.
+        mlat_grid: 2D numpy array representing Magnetic Latitude grid.
+    """
+    
+    # Ensure the grids match the predictions array
+    if mlt_grid.shape != predictions.shape or mlat_grid.shape != predictions.shape:
+        raise ValueError("Shapes of mlt_grid, mlat_grid, and predictions must match.")
+    
+    # Convert MLT to MLON
+    mlt = mlt_grid[0, :]  # Extract 1D MLT from the grid
+    mlon_1D = aacgmv2.convert_mlt(mlt, timestamp, m2a=True)
+    mlon_grid = np.tile(mlon_1D, (mlat_grid.shape[0], 1))
+
+    # Create figure with subplots - dual hemisphere layout
+    fig = plt.figure(figsize=(20, 14), dpi=300)  
+    
+    # Create subplot layout with space between plots
+    gs = fig.add_gridspec(1, 2, hspace=0.1, wspace=0.15, 
+                         left=0.05, right=0.80, top=0.90, bottom=0.1)  
+    
+    # Northern hemisphere subplot
+    ax_north = fig.add_subplot(gs[0, 0], projection=ccrs.Orthographic(-110, 70))
+    
+    # Southern hemisphere subplot  
+    ax_south = fig.add_subplot(gs[0, 1], projection=ccrs.Orthographic(-110, -70))
+
+    # Define plot parameters
+    coastcolor, bordercolor = 'white', 'white'
+    coastalpha, borderalpha = 0.4, 0.5
+    vmin, vmax = 0.0, 2.0
+    norm = colors.Normalize(vmin=vmin, vmax=vmax)
+    
+    def setup_hemisphere_plot(ax, mlat_data, title_suffix, hemisphere='north'):
+        """Setup common features for each hemisphere plot"""
+        ax.set_global()
+        
+        # Add map features
+        ax.add_feature(cfeature.LAND, edgecolor='black', facecolor='lightgray')
+        ax.coastlines('10m', color=coastcolor, alpha=coastalpha)
+        borders = cfeature.NaturalEarthFeature(
+            category='cultural', name='admin_0_countries', scale='10m', facecolor='none'
+        )
+        ax.add_feature(borders, edgecolor=bordercolor, alpha=borderalpha)
+        
+        # Grid lines with NO labels
+        gl = ax.gridlines(draw_labels=False,
+                          color='gray', 
+                          alpha=0.75, 
+                          linestyle='--',
+                          xlocs=np.arange(-180, 210, 30), 
+                          ylocs=np.arange(-80, 100, 20))   
+        
+        # Convert coordinates for this hemisphere
+        mlat_flat = mlat_data.flatten()
+        mlon_flat = mlon_grid.flatten()
+
+        glat_flat, glon_flat, _ = aacgmv2.convert_latlon_arr(
+            mlat_flat, mlon_flat, 100, timestamp, method_code="A2G"
+        )
+
+        glat_grid = glat_flat.reshape(mlat_data.shape)
+        glon_grid_hem = glon_flat.reshape(mlon_grid.shape)
+
+        # Plot flux
+        mesh = ax.pcolormesh(
+            glon_grid_hem,
+            glat_grid,
+            predictions,
+            transform=ccrs.PlateCarree(),
+            norm=norm,
+            cmap='plasma',
+            shading='auto',
+            alpha=0.8
+        )
+        
+        # **Auroral Boundary Detection**
+        threshold = 0.2 
+        eq_edges, pol_edges = [], []
+
+        for i in range(mlt_grid.shape[1]): 
+            tef_column = predictions[:, i]
+            above_thresh = np.where(tef_column > threshold)[0]
+
+            if len(above_thresh) > 0:
+                eq_edges.append((mlat_data[above_thresh[0], i], mlon_grid[above_thresh[0], i]))
+                pol_edges.append((mlat_data[above_thresh[-1], i], mlon_grid[above_thresh[-1], i]))
+            else:
+                max_idx = np.argmax(tef_column)
+                pol_edges.append((mlat_data[max_idx, i], mlon_grid[max_idx, i]))
+
+        # Convert boundaries to geographic coordinates
+        if eq_edges and pol_edges:
+            eq_edges = np.array(eq_edges)
+            pol_edges = np.array(pol_edges)
+
+            eq_glat, eq_glon, _ = aacgmv2.convert_latlon_arr(eq_edges[:, 0], eq_edges[:, 1], 100, timestamp, method_code="A2G")
+            pol_glat, pol_glon, _ = aacgmv2.convert_latlon_arr(pol_edges[:, 0], pol_edges[:, 1], 100, timestamp, method_code="A2G")
+
+            # **Plot auroral boundaries**
+            ax.scatter(eq_glon, eq_glat, color='red', s=10, transform=ccrs.PlateCarree(), label='Equatorward Edge', zorder=5)
+            ax.scatter(pol_glon, pol_glat, color='green', s=10, transform=ccrs.PlateCarree(), label='Poleward Edge', zorder=5)
+        
+        # Title
+        ax.set_title(f'{title_suffix}', fontsize=26, fontweight='bold', pad=15)
+        ax.add_feature(Nightshade(timestamp, alpha=0.3))
+        
+        return mesh
+
+    # Plot both hemispheres
+    mesh_north = setup_hemisphere_plot(ax_north, mlat_grid, "Northern Hemisphere", 'north')
+    mlat_grid_south = -mlat_grid  # Flip for southern hemisphere
+    mesh_south = setup_hemisphere_plot(ax_south, mlat_grid_south, "Southern Hemisphere", 'south')
+
+    # Add colorbar on the right side
+    cbar_left = 0.83  
+    cbar_bottom = 0.35
+    cbar_width = 0.02
+    cbar_height = 0.3
+    
+    cax = fig.add_axes([cbar_left, cbar_bottom, cbar_width, cbar_height])
+    cbar = plt.colorbar(mesh_north, cax=cax)
+    cbar.set_label(r'Electron Flux (mW/m$^2$)', fontsize=22, fontweight='bold', labelpad=15)
+    cbar.ax.tick_params(labelsize=20)
+    
+    # Add legend for boundary markers - positioned below the maps
+    legend_ax = fig.add_axes([0.3, 0.08, 0.4, 0.05])
+    legend_ax.axis('off')
+    legend_ax.legend(
+        [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='red', markersize=15),
+         plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='green', markersize=15)],
+        ['Equatorward Edge', 'Poleward Edge'],
+        loc='center',
+        frameon=False,
+        ncol=2,
+        fontsize=24
+    )
+
+    # Main title
+    main_title = f'ML-EPM: Electron Total Energy Flux Predictions\n{timestamp.strftime("%Y-%m-%d %H:%M UT")}'
+    fig.suptitle(main_title, fontsize=26, fontweight='bold', y=0.95)
+
+    plt.show()
+    return fig
+
 
 if __name__== "__main__":
 
     time1 = datetime(2014,2,27,18,0,0)
     # df, inputs, inputs_scaled, model = gen_spectrum_local(time1, 65, 0, m='ele')
     
-    df, inputs, inputs_scaled, model, mlt, mlat, predictions_ele = gen_global_data(time1, min_mlat = 40, max_mlat = 90, m='ele')
+    df, inputs, inputs_scaled, model, mlt, mlat, predictions_ele = gen_global_data(time1, min_mlat = 40, max_mlat = 90, m='ele', plot='yes')
     tef = predictions_ele['Total Energy Flux'].values
-    tef = np.reshape(tef, [50, 50])
-    fig = plot_flux_map(tef, time1, mlt, mlat)
+    tef = np.reshape(tef, [100, 100])
+    fig = plot_flux_map_dual(tef, time1, mlt, mlat)
